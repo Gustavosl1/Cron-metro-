@@ -1,42 +1,61 @@
-let tempo = 0;
-let isRunning = false;
-let intervalId;
+const timerEl = document.getElementById('timer');
+const marksList = document.getElementById('marks-list');
+let intervalId = 0;
+let timer = 0;
+let marks = [];
 
-const tempoElement = document.getElementById('tempo');
-const iniciarButton = document.getElementById('iniciar');
-const pararButton = document.getElementById('parar');
-const zerarButton = document.getElementById('zerar');
+const formatTime = (time) => {
+    const hours = Math.floor(time / 360000);
+    const minutes = Math.floor((time % 360000) / 6000);
+    const seconds = Math.floor((time % 6000) / 100);
+    const hundredths = time % 100;
 
-function atualizarTempo() {
-    const horas = Math.floor(tempo / 3600);
-        const minutos = Math.floor((tempo % 3600) / 60);
-            const segundos = tempo % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${hundredths.toString().padStart(2, '0')}`;
+}
 
-                tempoElement.innerText = `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
-                }
+const setTimer = (time) => {
+    timerEl.innerText = formatTime(time);
+}
 
-                iniciarButton.addEventListener('click', function () {
-                    if (!isRunning) {
-                            intervalId = setInterval(function () {
-                                        tempo++;
-                                                    atualizarTempo();
-                                                            }, 1000);
-                                                                    isRunning = true;
-                                                                        }
-                                                                        });
+const addMarkToList = (markIndex, markTime) => {
+    marksList.innerHTML += `<p>Marca ${markIndex}: ${formatTime(markTime)}</p>`;
+}
 
-                                                                        pararButton.addEventListener('click', function () {
-                                                                            if (isRunning) {
-                                                                                    clearInterval(intervalId);
-                                                                                            isRunning = false;
-                                                                                                }
-                                                                                                });
+const toggleTimer = () => {
+    const button = document.getElementById('power');
+    const action = button.getAttribute('action');
 
-                                                                                                zerarButton.addEventListener('click', function () {
-                                                                                                    tempo = 0;
-                                                                                                        atualizarTempo();
-                                                                                                            if (isRunning) {
-                                                                                                                    clearInterval(intervalId);
-                                                                                                                            isRunning = false;
-                                                                                                                                }
-                                                                                                                                });
+    clearInterval(intervalId);
+
+    if (action == 'start' || action == 'continue') {
+        intervalId = setInterval(() => {
+            timer += 1;
+            setTimer(timer);
+    }, 10);
+        button.setAttribute('action', 'pause');
+        button.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    } else if (action == 'pause') {
+        button.setAttribute('action', 'continue');
+        button.innerHTML = '<i class="fa-solid fa-play"></i>';
+    }
+}
+
+const markTime = () => {
+    marks.push(timer);
+    addMarkToList(marks.length, timer);
+}
+
+const resetTimer = () => {
+    clearInterval(intervalId);
+    timer = 0;
+    marks = [];
+    setTimer(timer);
+    marksList.innerHTML = '';
+    const button = document.getElementById('power');
+    button.setAttribute('action', 'start');
+    button.innerHTML = '<i class="fa-solid fa-play"></i>';
+}
+
+document.getElementById('power').addEventListener('click', toggleTimer);
+document.getElementById('mark').addEventListener('click', markTime);
+document.getElementById('reset').addEventListener('click', resetTimer);
