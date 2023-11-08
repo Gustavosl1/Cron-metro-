@@ -1,0 +1,32 @@
+body {
+        font-family: Arial, sans-serif;
+            text-align: center;
+                margin: 0;
+                    padding: 0;
+                        background-color: #000;
+                        }
+
+           .cronometro {
+                            background-color: #ffffff;
+                                border: 1px solid #ccc;
+                                    border-radius: 10px;
+                                        width: 900px;
+                                            margin: 100px auto;
+                                                padding: 20px;
+                                                }
+
+                                                #tempo {
+                                                    font-size: 154px;
+                                                        margin-bottom: 10px;
+                                                        }
+
+                                                        button {
+                                                            padding: 5px 10px;
+                                                                margin: 5px;
+                                                                    font-size: 40px;
+                                                                        cursor: pointer;
+                                                                           border-radius: 10px;
+                                                                           }
+
+                                                                      
+                                                                       
